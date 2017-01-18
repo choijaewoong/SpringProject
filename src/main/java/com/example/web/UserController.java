@@ -33,4 +33,9 @@ public class UserController {
 		model.addAttribute("users", users);
 		return "/user/list"; // html 접근		
 	}
+	
+	@GetMapping("/form")
+	public String form() {	
+		return "/user/form";
+	}
 }
