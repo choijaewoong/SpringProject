@@ -1,16 +1,31 @@
 package com.example.domain;
 
-public class Questions {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+
+@Entity
+public class Question {
 	
+	@Id @GeneratedValue
+	private long id;
+	
+	@Column(nullable=false)
 	private String title;
+	
+	@Column(nullable=false)
 	private String writer;
+	
+	@Column(nullable=false) @Lob
 	private String contents;
 	
-	public Questions() {
+	public Question() {
 		
 	}
 
-	public Questions(String title, String userId, String content) {
+	public Question(String title, String userId, String content) {
 		this.title = title;
 		this.writer = userId;
 		this.contents = content;
