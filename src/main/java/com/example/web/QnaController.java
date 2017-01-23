@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Question;
@@ -54,18 +55,43 @@ public class QnaController {
 		
 		Question question = questionRepository.findOne(id);
 		model.addAttribute("question", question);
-		return "/qna/show";
-		
+		return "/qna/show";		
 	}
 	
-	@GetMapping("/qna/show")
-	public String show() {
-		return "/qna/show";
+	@GetMapping("/qna/update/{id}")
+	public String update(@PathVariable long id, Model model, HttpSession session){
+		Question question= questionRepository.findOne(id);
+		model.addAttribute("question", question);		
+		//checkOwner(id, session);
+		
+		return "/qna/update";		
 	}
+
+	@PutMapping("/qna/update/{id}")
+	public String update(@PathVariable long id, Question question, HttpSession session) {
+//		checkOwner(id, session);
+		
+		Question oldQuestion= questionRepository.findOne(id);
+		oldQuestion.update(question);
+		
+		questionRepository.save(oldQuestion); // 없어도 orm 프레임워크가 알아서 해줌		
+		return "redirect:/";
+	}
+	
 	
 	@GetMapping("/")
 	public String index(Model model) {
 		model.addAttribute("questions", questionRepository.findAll());
 		return "/index";
+	}
+	
+	private void checkOwner(long id, HttpSession session) {
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			throw new IllegalStateException("로그인하지 않은 사용자...");
+		}
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		if(!loginUser.matchId(id)){
+			throw new IllegalStateException("다른 사용자 정보를 수정할 수 없습니다.");	
+		}
 	}
 }

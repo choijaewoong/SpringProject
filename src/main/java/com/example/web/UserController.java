@@ -51,7 +51,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}/form")
-	public String updateForm(@PathVariable long id, Model model, HttpSession session) {
+	public String update(@PathVariable long id, Model model, HttpSession session) {
 		checkOwner(id, session);
 		
 		model.addAttribute("user", userRepository.findOne(id));
@@ -85,6 +85,13 @@ public class UserController {
 		}
 		
 		session.setAttribute(HttpSessionUtils.LOGIN_USER, user);		
+		return "redirect:/";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		
+		session.removeAttribute(HttpSessionUtils.LOGIN_USER);
 		return "redirect:/";
 	}
 	

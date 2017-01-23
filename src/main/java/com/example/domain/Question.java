@@ -42,6 +42,13 @@ public class Question {
 	public void setContents(String content) {
 		this.contents = content;
 	}
+	
+	public void update(Question question) {
+//		if(check(writer)) {
+			this.title = question.title;
+			this.contents = question.contents;			
+//		}
+	}	
 
 	@Override
 	public String toString() {
