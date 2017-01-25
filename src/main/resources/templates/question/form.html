@@ -19,8 +19,7 @@
    <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
       <div class="panel panel-default content-main">
       	  {{#user}}
-          <form name="question" method="post" action="/qna/questions">
-          	  <input type="hidden" name="writer" value="{{name}}">
+          <form name="question" method="post" action="/questions">
               <div class="form-group">
                   <label for="writer">글쓴이</label>
                   <p>{{name}}</p>

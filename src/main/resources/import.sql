@@ -1,2 +1,1 @@
 insert into user (id, user_id, password, name, email) values (1, 'jaewoong', '12341234', 'choijaewoong', 'jwchoi0129@gmail.com'),(2, 'asdf', 'asdf', 'asdf', 'jwchoi0129@gmail.com'),(3, 'qwer', 'qwer', 'qwer', 'torerov39@gmail.com');
-insert into question (id, title, writer, contents) values (1, 'hello', 'xxx', 'hello world');

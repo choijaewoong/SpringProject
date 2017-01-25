@@ -22,6 +22,7 @@ import com.example.domain.User;
 import com.example.utils.HttpSessionUtils;
 
 @Controller
+@RequestMapping("")
 public class QnaController {
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);	
 //	private List<Question> questions = new ArrayList<>();
@@ -30,8 +31,11 @@ public class QnaController {
 	private QuestionRepository questionRepository;
 	
 	
-	@PostMapping("/qna/questions")
-	public String questions(Question question) {
+	@PostMapping("/questions")
+	public String questions(Question question, HttpSession session) {
+		
+		User loginUser = HttpSessionUtils.getUserFromSession(session);
+		question.setWriter(loginUser);		
 		questionRepository.save(question);
 //		questions.add(question);
 //		log.info("users size : " + questions.size());
@@ -39,7 +43,7 @@ public class QnaController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("/qna/form")
+	@GetMapping("/questions/new")
 	public String form(Model model, HttpSession session) {
 		if(!HttpSessionUtils.isLoginUser(session)) {
 //			throw new IllegalStateException("로그인하지 않은 사용자...");
@@ -47,40 +51,40 @@ public class QnaController {
 		}
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		model.addAttribute("user", loginUser);
-		return "/qna/form";
+		return "/question/form";
 	}
 	
-	@GetMapping("/qna/detail/{id}")
-	public String detail(@PathVariable long id, Model model) {
+	@GetMapping("/questions/{id}")
+	public String show(@PathVariable long id, Model model) {
 		
 		Question question = questionRepository.findOne(id);
 		model.addAttribute("question", question);
-		return "/qna/show";		
+		return "/question/show";		
 	}
 	
-	@GetMapping("/qna/update/{id}")
-	public String update(@PathVariable long id, Model model, HttpSession session){
+	@GetMapping("/questions/{id}/edit")
+	public String edit(@PathVariable long id, Model model, HttpSession session){
 		Question question= questionRepository.findOne(id);
 		model.addAttribute("question", question);		
 		//checkOwner(id, session);
 		
-		return "/qna/update";		
+		return "/question/update";		
 	}
 
-	@PutMapping("/qna/update/{id}")
+	@PutMapping("/questions/{id}")
 	public String update(@PathVariable long id, Question question, HttpSession session) {
 //		checkOwner(id, session);
-		
 		Question oldQuestion= questionRepository.findOne(id);
 		oldQuestion.update(question);
 		
-		questionRepository.save(oldQuestion); // 없어도 orm 프레임워크가 알아서 해줌		
-		return "redirect:/";
+		questionRepository.save(oldQuestion); // 없어도 orm 프레임워크가 알아서 해줌
+		return "redirect:/questions/" + id;
 	}
 	
 	
 	@GetMapping("/")
 	public String index(Model model) {
+		
 		model.addAttribute("questions", questionRepository.findAll());
 		return "/index";
 	}

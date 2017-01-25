@@ -1,10 +1,14 @@
 package com.example.domain;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Question {
@@ -15,8 +19,15 @@ public class Question {
 	@Column(nullable=false)
 	private String title;
 	
-	@Column(nullable=false)
-	private String writer;
+	@ManyToOne
+	private User writer;
+	
+	@OneToMany
+	private List<Comment> comments;
+	
+	
+//	@Column(nullable=false)
+//	private String writer;
 	
 	@Column(nullable=false) @Lob
 	private String contents;
@@ -25,9 +36,9 @@ public class Question {
 		
 	}
 
-	public Question(String title, String userId, String content) {
+	public Question(String title, User writer, String content) {
 		this.title = title;
-		this.writer = userId;
+		this.writer = writer;
 		this.contents = content;
 	}
 
@@ -35,8 +46,8 @@ public class Question {
 		this.title = title;
 	}
 
-	public void setWriter(String userId) {
-		this.writer = userId;
+	public void setWriter(User writer) {
+		this.writer = writer;
 	}
 
 	public void setContents(String content) {

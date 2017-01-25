@@ -21,7 +21,7 @@ import com.example.domain.UserRepository;
 import com.example.utils.HttpSessionUtils;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);	
 //	private List<User> users = new ArrayList<>();
@@ -29,36 +29,36 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@PostMapping("/create")
+	@PostMapping("/")
 	public String create(User user) {
 		userRepository.save(user);
 //		users.add(user);
 //		log.info("users size : " + users.size());
 //		log.debug("users : " + users);
 
-		return "redirect:/user/list";
+		return "redirect:../";
 	}
 	
-	@GetMapping("/list") // url 접근
+	@GetMapping("/") // url 접근
 	public String list(Model model) {		
 		model.addAttribute("users", userRepository.findAll());
 		return "/user/list"; // html 접근		
 	}
 	
-	@GetMapping("/form")
+	@GetMapping("/new")
 	public String form() {	
 		return "/user/form";
 	}
 	
-	@GetMapping("/{id}/form")
-	public String update(@PathVariable long id, Model model, HttpSession session) {
+	@GetMapping("/{id}/edit")
+	public String edit(@PathVariable long id, Model model, HttpSession session) {
 		checkOwner(id, session);
 		
 		model.addAttribute("user", userRepository.findOne(id));
 		return "/user/updateForm";
 	}
 
-	@PutMapping("/{id}/update")
+	@PutMapping("/{id}")
 	public String update(@PathVariable long id, User user, HttpSession session) {
 		checkOwner(id, session);
 		
