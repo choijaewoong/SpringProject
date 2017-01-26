@@ -10,6 +10,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Question {
 	
@@ -22,13 +24,9 @@ public class Question {
 	@ManyToOne
 	private User writer;
 	
-	@OneToMany
+	@OneToMany(mappedBy="question")
 	private List<Comment> comments;
-	
-	
-//	@Column(nullable=false)
-//	private String writer;
-	
+		
 	@Column(nullable=false) @Lob
 	private String contents;
 	
@@ -40,6 +38,27 @@ public class Question {
 		this.title = title;
 		this.writer = writer;
 		this.contents = content;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public User getWriter() {
+		return writer;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getContents() {
+		return contents;
+	}
+
+	@JsonIgnore
+	public List<Comment> getAnswers() {
+		return comments;
 	}
 
 	public void setTitle(String title) {

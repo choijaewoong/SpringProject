@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.domain.CommentRepository;
 import com.example.domain.Question;
 import com.example.domain.QuestionRepository;
 import com.example.domain.User;
@@ -29,6 +30,9 @@ public class QnaController {
 	
 	@Autowired
 	private QuestionRepository questionRepository;
+	
+	@Autowired
+	private CommentRepository commentRepository;
 	
 	
 	@PostMapping("/questions")
@@ -58,6 +62,7 @@ public class QnaController {
 	public String show(@PathVariable long id, Model model) {
 		
 		Question question = questionRepository.findOne(id);
+		
 		model.addAttribute("question", question);
 		return "/question/show";		
 	}

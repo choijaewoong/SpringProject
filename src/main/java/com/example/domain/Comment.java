@@ -2,8 +2,10 @@ package com.example.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
@@ -11,7 +13,7 @@ import javax.persistence.ManyToOne;
 public class Comment {
 	
 	@Id @GeneratedValue
-	private long id;
+	private Long id;
 	
 	@Column(nullable=false) @Lob
 	private String contents;
@@ -22,12 +24,29 @@ public class Comment {
 	@ManyToOne
 	private Question question;
 	
-	private Comment() {
+	public Comment() {
 		
 	}
 	
-	public Comment(String contents) {
+	public Comment(User writer, Question question, String contents) {
+		this.writer = writer;
+		this.question = question;
 		this.contents = contents;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	public User getWriter() {
+		return writer;
+	}
+
+	public Question getQuestion() {
+		return question;
+	}
+
+	public String getContents() {
+		return contents;
 	}
 
 	public void setContents(String contents) {
@@ -36,6 +55,11 @@ public class Comment {
 
 	public void setWriter(User writer) {
 		this.writer = writer;
+	}
+	
+
+	public void setQuestion(Question question) {
+		this.question = question;
 	}
 
 	@Override
